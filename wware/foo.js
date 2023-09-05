@@ -1,6 +1,7 @@
 const { extrudeLinear } = require('@jscad/modeling').extrusions;
 const { path2 } = require('@jscad/modeling').geometries;
 const { translate } = require('@jscad/modeling').transforms;
+const { colorize } = require('@jscad/modeling').colors;
 const PI = 3.14159265358;
 // the angle increment will be about 5 degrees
 const INCREMENT = 0.1;   // radians
@@ -39,9 +40,12 @@ const main = () => {
   path = counterclockwise(path, 5, 5, 5, 1.5 * PI, 0);
   path = clockwise(path, 15, 15, 5, PI, .5 * PI);
   path = path2.appendPoints([[0,  20]], path);
-  const shape = extrudeLinear({height: 2}, path2.close(path));
-  // prepare to export DXF for machining
-  return [translate([0, 0, -1], shape)];
+  const shape = colorize(
+    [0, 0.5, 0.5, 0.5],
+    extrudeLinear({height: 2}, path2.close(path))
+  );
+  // return [translate([0, 0, -1], shape)];
+  return [shape];
 }
 
 module.exports = { main };
